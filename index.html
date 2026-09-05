@@ -1,207 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>t.me/MCUmoviesByMibu</title>
-    <style>
-        :root { --marvel-red: #e62429; --subtle-red: rgba(230, 36, 41, 0.15); --bg: #050505; --card: #121212; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; padding: 20px; line-height: 1.4; }
-        .container { max-width: 1000px; margin: auto; }
-        
-        .header { 
-            position: sticky; top: 0; background: rgba(5, 5, 5, 0.95); 
-            backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid #222; z-index: 1000; 
-        }
-        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 3px; margin: 0; color: var(--marvel-red); }
-        #stats { font-size: 1.1rem; margin-top: 5px; font-weight: 700; color: #fff; }
-        .bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden; }
-        #bar-fill { background: var(--marvel-red); height: 100%; width: 0%; transition: 0.5s ease; box-shadow: 0 0 10px var(--marvel-red); }
-
-        h2 { font-size: 1.4rem; color: var(--marvel-red); margin-top: 40px; border-left: 4px solid var(--marvel-red); padding-left: 12px; text-transform: uppercase; }
-        h3 { font-size: 0.9rem; color: #888; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; }
-
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .mcu-movie { background: var(--subtle-red); border: 1px solid var(--marvel-red); padding: 12px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; }
-        .legacy-movie { background: var(--card); border: 1px solid #222; padding: 12px; border-radius: 8px; display: flex; align-items: center; }
-
-        .episode-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-        .ep-chip { position: relative; background: #1a1a1a; border: 1px solid #333; border-radius: 4px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .ep-chip input { position: absolute; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-        .ep-label { font-size: 0.75rem; color: #aaa; z-index: 1; pointer-events: none; }
-        .ep-chip input:checked ~ .ep-label { color: #fff; font-weight: bold; }
-        .ep-chip.checked { border-color: var(--marvel-red); background: rgba(230, 36, 41, 0.2); }
-        .ep-chip.checked::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 1px solid var(--marvel-red); border-radius: 4px; box-shadow: inset 0 0 5px var(--marvel-red); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Watch Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>t.me/MCUmoviesByMibu</h1>
-        <div id="stats">Progress: 0 / 317</div>
-        <div class="bar-bg"><div id="bar-fill"></div></div>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <h1 class="wordmark">Watch Order</h1>
+        <p class="subtitle">Every Marvel film and series, in sequence.</p>
+      </div>
+      <button id="hideWatchedBtn" class="ghost-btn" type="button" aria-pressed="false">Hide watched</button>
     </div>
 
-    <h2>Phase One</h2>
-    <div class="movie-grid" id="phase1"></div>
-
-    <h2>Phase Two</h2>
-    <div class="movie-grid" id="phase2"></div>
-
-    <h2>Phase Three</h2>
-    <div class="movie-grid" id="phase3"></div>
-
-    <h2>Phase Four</h2>
-    <div id="phase4_content"></div>
-
-    <h2>Phase Five</h2>
-    <div id="phase5_start"></div>
-
-    <h3>X-Men Film Franchise (Legacy)</h3>
-    <div class="movie-grid" id="xmen_legacy"></div>
-
-    <div class="movie-grid">
-        <div class="mcu-movie"><input type="checkbox" id="dw24"><label for="dw24" style="margin-left:10px">Deadpool & Wolverine (2024)</label></div>
+    <div class="progress-row">
+      <div class="progress-figure">
+        <span id="progressCount">0</span><span class="progress-total">/ <span id="progressTotal">0</span> watched</span>
+      </div>
+      <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
     </div>
 
-    <div id="phase5_mid"></div>
-    <div class="movie-grid">
-        <div class="mcu-movie"><input type="checkbox" id="ca25"><label for="ca25" style="margin-left:10px">Captain America: Brave New World (2025)</label></div>
-    </div>
+    <nav class="section-nav" id="sectionNav" aria-label="Jump to section"></nav>
+  </div>
+</header>
 
-    <h2>The Defenders Saga</h2>
-    <div id="defenders_list"></div>
+<main id="main" class="content"></main>
 
-    <div id="born_again_s1_box"></div>
+<footer class="site-footer">
+  <button id="resetBtn" class="text-btn" type="button">Reset all progress</button>
+  <p class="footnote">Progress saves automatically in this browser, on this device.</p>
+</footer>
 
-    <div class="movie-grid" style="margin-top:20px;">
-        <div class="mcu-movie"><input type="checkbox" id="tb25"><label for="tb25" style="margin-left:10px">Thunderbolts* (2025)</label></div>
-    </div>
-
-    <div id="ironheart_box"></div>
-
-    <h2>Phase Six</h2>
-    <h3>Legacy Fantastic Four</h3>
-    <div class="movie-grid" id="ff_legacy"></div>
-    <div class="movie-grid">
-        <div class="mcu-movie"><input type="checkbox" id="ff25"><label for="ff25" style="margin-left:10px">The Fantastic Four: First Steps (2025)</label></div>
-    </div>
-    <div id="phase6_content"></div>
-</div>
-
-<script>
-    const p1 = ["Iron Man (2008)", "The Incredible Hulk (2008)", "Iron Man 2 (2010)", "Thor (2011)", "Captain America: The First Avenger (2011)", "The Avengers (2012)"];
-    const p2 = ["Iron Man 3 (2013)", "Thor: The Dark World (2013)", "Captain America: The Winter Soldier (2014)", "Guardians of the Galaxy (2014)", "Avengers: Age of Ultron (2015)", "Ant-Man (2015)"];
-    const p3 = ["Captain America: Civil War (2016)", "Doctor Strange (2016)", "Guardians of the Galaxy 2 (2017)", "Spider-Man: Homecoming (2017)", "Thor: Ragnarok (2017)", "Black Panther (2018)", "Avengers: Infinity War (2018)", "Ant-Man and the Wasp (2018)", "Captain Marvel (2019)", "Avengers: Endgame (2019)", "Spider-Man: Far From Home (2019)"];
-    
-    const phase4 = [
-        { id: 'wv', name: 'WandaVision (Season 1)', count: 9 },
-        { id: 'fws', name: 'Falcon and the Winter Soldier (Season 1)', count: 6 },
-        { id: 'l1', name: 'Loki (Season 1)', count: 6 },
-        { type: 'movie', name: 'Black Widow (2021)' },
-        { id: 'wi1', name: 'What If...? (Season 1)', count: 9 },
-        { type: 'movie', name: 'Shang-Chi and the Legend of the Ten Rings (2021)' },
-        { type: 'movie', name: 'Eternals (2021)' },
-        { id: 'hk', name: 'Hawkeye (Season 1)', count: 6 },
-        { type: 'movie', name: 'Spider-Man: No Way Home (2021)' },
-        { id: 'mk', name: 'Moon Knight (Season 1)', count: 6 },
-        { type: 'movie', name: 'Doctor Strange in the Multiverse of Madness (2022)' },
-        { id: 'ms', name: 'Ms. Marvel (Season 1)', count: 6 },
-        { type: 'movie', name: 'Thor: Love and Thunder (2022)' },
-        { id: 'gr1', name: 'I Am Groot (Season 1)', count: 5 },
-        { id: 'sh', name: 'She-Hulk (Season 1)', count: 9 },
-        { type: 'movie', name: 'Werewolf By Night (2022)' },
-        { type: 'movie', name: 'Black Panther: Wakanda Forever (2022)' },
-        { type: 'movie', name: 'Guardians of the Galaxy Christmas Special (2022)' }
-    ];
-
-    const phase5 = [
-        { type: 'movie', name: 'Ant-Man and the Wasp: Quantumania (2023)' },
-        { type: 'movie', name: 'Guardians of the Galaxy 3 (2023)' },
-        { id: 'si', name: 'Secret Invasion (Season 1)', count: 6 },
-        { id: 'gr2', name: 'I Am Groot (Season 2)', count: 5 },
-        { id: 'l2', name: 'Loki (Season 2)', count: 6 },
-        { type: 'movie', name: 'The Marvels (2023)' },
-        { id: 'wi2', name: 'What If...? (Season 2)', count: 9 },
-        { id: 'ec', name: 'Echo (Season 1)', count: 5 }
-    ];
-
-    const xmen = ["X-Men (2000)", "X2: X-Men United (2003)", "X-Men: The Last Stand (2006)", "X-Men Origins: Wolverine (2009)", "X-Men: First Class (2011)", "The Wolverine (2013)", "X-Men: Days of Future Past (2014)", "Deadpool (2016)", "X-Men: Apocalypse (2016)", "Logan (2017)", "Deadpool 2 (2018)", "Dark Phoenix (2019)", "The New Mutants (2020)"];
-    const phase5mid = [{ id: 'ag', name: 'Agatha All Along (Season 1)', count: 9 }, { id: 'wi3', name: 'What If...? (Season 3)', count: 8 }];
-    const defenders = [{ id: 'd1', name: 'Daredevil (Season 1)', count: 13 }, { id: 'j1', name: 'Jessica Jones (Season 1)', count: 13 }, { id: 'd2', name: 'Daredevil (Season 2)', count: 13 }, { id: 'l1c', name: 'Luke Cage (Season 1)', count: 13 }, { id: 'i1f', name: 'Iron Fist (Season 1)', count: 13 }, { id: 'df1', name: 'The Defenders (Season 1)', count: 8 }, { id: 'p1s', name: 'The Punisher (Season 1)', count: 13 }, { id: 'j2', name: 'Jessica Jones (Season 2)', count: 13 }, { id: 'l2c', name: 'Luke Cage (Season 2)', count: 13 }, { id: 'i2f', name: 'Iron Fist (Season 2)', count: 10 }, { id: 'd3', name: 'Daredevil (Season 3)', count: 13 }, { id: 'p2s', name: 'The Punisher (Season 2)', count: 13 }, { id: 'j3', name: 'Jessica Jones (Season 3)', count: 13 }];
-    const ffLegacy = ["Fantastic Four (2005)", "Fantastic Four: Rise of the Silver Surfer (2007)", "Fantastic Four (2015)"];
-
-    function renderMovies(list, containerId, prefix) {
-        const container = document.getElementById(containerId);
-        list.forEach((title, idx) => {
-            const div = document.createElement('div'); div.className = 'mcu-movie';
-            const id = `${prefix}_${idx}`;
-            div.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}" style="margin-left:10px">${title}</label>`;
-            container.appendChild(div);
-        });
-    }
-
-    function renderMixed(data, containerId) {
-        const container = document.getElementById(containerId);
-        data.forEach(item => {
-            if (item.type === 'movie') {
-                const wrap = document.createElement('div'); wrap.className = 'movie-grid';
-                const div = document.createElement('div'); div.className = 'mcu-movie';
-                const id = `mv_${item.name.replace(/\s+/g, '')}`;
-                div.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}" style="margin-left:10px">${item.name}</label>`;
-                wrap.appendChild(div); container.appendChild(wrap);
-            } else {
-                const h3 = document.createElement('h3'); h3.innerText = item.name;
-                const grid = document.createElement('div'); grid.className = 'episode-grid';
-                for (let i = 1; i <= item.count; i++) {
-                    const label = document.createElement('label'); label.className = 'ep-chip';
-                    const id = `${item.id}_ep${i}`;
-                    label.innerHTML = `<input type="checkbox" id="${id}"><span class="ep-label">${i}</span>`;
-                    grid.appendChild(label);
-                }
-                container.appendChild(h3); container.appendChild(grid);
-            }
-        });
-    }
-
-    function renderLegacy(list, containerId) {
-        const container = document.getElementById(containerId);
-        list.forEach((title, idx) => {
-            const div = document.createElement('div'); div.className = 'legacy-movie';
-            const id = `leg_${containerId}_${idx}`;
-            div.innerHTML = `<input type="checkbox" id="${id}"><label for="${id}" style="margin-left:10px">${title}</label>`;
-            container.appendChild(div);
-        });
-    }
-
-    function sync() {
-        const checks = {};
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            checks[cb.id] = cb.checked;
-            if (cb.parentNode.classList.contains('ep-chip')) cb.parentNode.classList.toggle('checked', cb.checked);
-        });
-        localStorage.setItem('mibu_final_tracker', JSON.stringify(checks));
-        const total = document.querySelectorAll('input[type="checkbox"]').length;
-        const active = document.querySelectorAll('input[type="checkbox"]:checked').length;
-        document.getElementById('stats').innerText = `Progress: ${active} / ${total}`;
-        document.getElementById('bar-fill').style.width = (active / total * 100) + '%';
-    }
-
-    renderMovies(p1, 'phase1', 'p1'); renderMovies(p2, 'phase2', 'p2'); renderMovies(p3, 'phase3', 'p3');
-    renderMixed(phase4, 'phase4_content');
-    renderMixed(phase5, 'phase5_start');
-    renderLegacy(xmen, 'xmen_legacy');
-    renderMixed(phase5mid, 'phase5_mid');
-    renderMixed(defenders, 'defenders_list');
-    renderMixed([{ id: 'ba1', name: 'Daredevil: Born Again (Season 1)', count: 9 }], 'born_again_s1_box');
-    renderMixed([{ id: 'ih', name: 'Ironheart (Season 1)', count: 6 }], 'ironheart_box');
-    renderLegacy(ffLegacy, 'ff_legacy');
-    renderMixed([{ id: 'wak', name: 'Eyes of Wakanda (Season 1)', count: 4 }, { id: 'zom', name: 'Marvel Zombies (Season 1)', count: 4 }, { id: 'wm', name: 'Wonder Man (Season 1)', count: 8 }, { id: 'ba2', name: 'Daredevil: Born Again (Season 2)', count: 8 }], 'phase6_content');
-
-    const saved = JSON.parse(localStorage.getItem('mibu_final_tracker') || '{}');
-    Object.keys(saved).forEach(id => { const cb = document.getElementById(id); if (cb) cb.checked = saved[id]; });
-    sync(); document.addEventListener('change', (e) => { if (e.target.type === 'checkbox') sync(); });
-</script>
+<script src="script.js" defer></script>
 </body>
 </html>
