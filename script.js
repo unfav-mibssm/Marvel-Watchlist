@@ -23,7 +23,6 @@
       id: "phase1",
       title: "Phase One",
       saga: "The Infinity Saga",
-      accent: "gold",
       items: [
         movie("Iron Man", "2008"),
         movie("The Incredible Hulk", "2008"),
@@ -36,7 +35,6 @@
     {
       id: "phase2",
       title: "Phase Two",
-      accent: "gold",
       items: [
         movie("Iron Man 3", "2013"),
         movie("Thor: The Dark World", "2013"),
@@ -49,7 +47,6 @@
     {
       id: "phase3",
       title: "Phase Three",
-      accent: "gold",
       items: [
         movie("Captain America: Civil War", "2016"),
         movie("Doctor Strange", "2016"),
@@ -68,7 +65,6 @@
       id: "phase4",
       title: "Phase Four",
       saga: "The Multiverse Saga",
-      accent: "violet",
       items: [
         series("wv", "WandaVision", 1, 9),
         series("fws", "Falcon and the Winter Soldier", 1, 6),
@@ -93,7 +89,6 @@
     {
       id: "phase5",
       title: "Phase Five",
-      accent: "violet",
       items: [
         movie("Ant-Man and the Wasp: Quantumania", "2023"),
         movie("Guardians of the Galaxy 3", "2023"),
@@ -127,7 +122,6 @@
     {
       id: "defenders",
       title: "The Defenders Saga",
-      accent: "rust",
       items: [
         series("d1", "Daredevil", 1, 13),
         series("j1", "Jessica Jones", 1, 13),
@@ -150,7 +144,6 @@
     {
       id: "phase6",
       title: "Phase Six",
-      accent: "teal",
       items: [
         legacyGroup("Fantastic Four Film Franchise", "Not part of MCU continuity", [
           { title: "Fantastic Four", meta: "2005" },
@@ -290,10 +283,6 @@
 
   DATA.forEach(function (section) {
     var sectionEl = el('<section class="phase-section" id="' + section.id + '"></section>');
-    if (section.accent) {
-      sectionEl.style.setProperty("--saga-color", "var(--" + section.accent + ")");
-    }
-
     if (section.saga) {
       sectionEl.appendChild(el('<p class="saga-kicker">' + section.saga + "</p>"));
     }
